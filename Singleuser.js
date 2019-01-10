@@ -3,16 +3,21 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native';
 import { AppRegistry, TextInput } from 'react-native';
 import { ScrollView, Alert } from 'react-native';
-import { FlatList, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Font } from 'expo';
+import NumberFormat from 'react-number-format';
+import { Image } from 'react-native';
 
 export default class Singleuser extends React.Component {
 
-  skills = ['Overall', 'Attack', 'Defence', 'Strength',
-    'Hitpoints', 'Ranged', 'Prayer', 'Magic', 'Cooking',
-    'Woodcutting', 'Fletching', 'Fishing', 'Firemaking',
-    'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility',
-    'Thieving', 'Slayer', 'Farming', 'Runecraft', 'Hunter', 'Construction'];
+  componentDidMount() {
+    Font.loadAsync({
+      'visitor': require('./assets/fonts/visitor.ttf'),
+    });
+    this.setState({ fontLoaded: true });
+  }
+
   data = [
     {
       "rank": "",
@@ -146,33 +151,34 @@ export default class Singleuser extends React.Component {
     this.state = {
       tableHead: ['Skill', 'Rank', 'Level', 'XP'],
       tableData: [
-        ['Overall', '', '', ''],
-        ['Attack', '', '', ''],
-        ['Defence', '', '', ''],
-        ['Strength', '', '', ''],
-        ['Hitpoints', '', '', ''],
-        ['Ranged', '', '', ''],
-        ['Prayer', '', '', ''],
-        ['Magic', '', '', ''],
-        ['Cooking', '', '', ''],
-        ['Woodcutting', '', '', ''],
-        ['Fletching', '', '', ''],
-        ['Fishing', '', '', ''],
-        ['Firemaking', '', '', ''],
-        ['Crafting', '', '', ''],
-        ['Smithing', '', '', ''],
-        ['Mining', '', '', ''],
-        ['Herblore', '', '', ''],
-        ['Agility', '', '', ''],
-        ['Thieving', '', '', ''],
-        ['Slayer', '', '', ''],
-        ['Farming', '', '', ''],
-        ['Runecraft', '', '', ''],
-        ['Hunter', '', '', ''],
-        ['Construction', '', '', '']
+        [<View style={styles.imageView}><Image source={require('./assets/skills/total.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/att.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/defence.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/str.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/hp.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/ranged.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/prayer.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/magic.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/cooking.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/wc.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/flet.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/fishing.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/fm.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/crafting.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/smithing.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/mining.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/herblore.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/agi.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/thieving.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/slayer.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/farming.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/rc.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/hunter.png')} style={styles.imageStyle} /></View>, '', '', ''],
+        [<View style={styles.imageView}><Image source={require('./assets/skills/construction.png')} style={styles.imageStyle} /></View>, '', '', '']
       ],
 
-      text: ''
+      text: '',
+      fontLoaded: false
     }
   }
 
@@ -181,23 +187,28 @@ export default class Singleuser extends React.Component {
   render() {
     const state = this.state;
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <TextInput
-          style={styles.searchContainer}
-          onChangeText={(text) => this.setState({ text })}
-          value={this.state.text}
-          placeholder='username'
-        />
-        <Button
-          onPress={this.getOSRSHiscoreByName.bind(this)}
-          title="Search hiscores"
-          color="#841584"
-        />
-        <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-          <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-          <Rows data={state.tableData} textStyle={styles.text} />
-        </Table>
-      </ScrollView>
+      this.state.fontLoaded ? (
+        <ScrollView style={styles.contentContainer}>
+          <TextInput
+            style={styles.searchContainer}
+            onChangeText={(text) => this.setState({ text })}
+            value={this.state.text}
+            placeholder='username'
+          />
+
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={this.getOSRSHiscoreByName.bind(this)}>
+            <Text style={styles.text}>Search hiscores</Text>
+          </TouchableOpacity>
+
+
+          <Table borderStyle={{ borderWidth: 2, borderColor: 'yellow' }}>
+            <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
+            <Rows data={state.tableData} textStyle={styles.text} />
+          </Table>
+        </ScrollView>
+      ) : null
     );
 
 
@@ -205,7 +216,6 @@ export default class Singleuser extends React.Component {
 
   fetchStatusHandler(response) {
 
-    console.log('RESP ALLA');
     if (response.status === 200) {
       return response;
     } else {
@@ -215,8 +225,6 @@ export default class Singleuser extends React.Component {
 
   getOSRSHiscoreByName() {
 
-    console.log('ALLA OIS');
-    console.log(this.state.text);
     return fetch('https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=' + this.state.text)
       .then(this.fetchStatusHandler)
       .then(response => {
@@ -227,7 +235,7 @@ export default class Singleuser extends React.Component {
         var stringPiece = ' ';
 
         for (var i = 0; i < keys.length; i++) {
-          for (var k = 0; k < 3; k++) {
+          for (var k = 1; k < 4; k++) {
             while (currentInput != ',' && currentInput != '' && currentInput != '\n' && currentIndex < stringScores.length) {
               stringPiece += stringScores[currentIndex];
               currentInput = stringScores[currentIndex];
@@ -235,15 +243,14 @@ export default class Singleuser extends React.Component {
             }
             stringPiece = stringPiece.replace(',', '');
             stringPiece = stringPiece.replace(' ', '');
-            // console.log(k + ' | ' + stringPiece);
-            if (k == 0) {
+            if (k == 1) {
               this.data[keys[i]].rank = stringPiece;
               let newArray = [...this.state.tableData];
-              newArray[i][0] = stringPiece;
-            } else if (k == 1) {
+              newArray[i][1] = stringPiece;
+            } else if (k == 2) {
               this.data[keys[i]].level = stringPiece;
             }
-            else if (k == 2) {
+            else if (k == 3) {
               this.data[keys[i]].xp = stringPiece;
             }
             stringPiece = '';
@@ -255,17 +262,18 @@ export default class Singleuser extends React.Component {
         let copyValues = this.state.tableData;
 
         for (let i = 0; i < copyValues.length; i++) {
-          if(this.data[i].rank === "-1") {
+          if (this.data[i].rank === "-1") {
             copyValues[i][3] = '';
             copyValues[i][2] = '';
             copyValues[i][1] = '';
-            copyValues[i][0] = this.skills[i];
+            copyValues[i][0] = copyValues[i][0];
           } else {
-          copyValues[i][3] = this.data[i].xp;
-          copyValues[i][2] = this.data[i].level;
-          copyValues[i][1] = this.data[i].rank;
-          copyValues[i][0] = this.skills[i];
-        }
+            copyValues[i][3] = <NumberFormat value={parseInt(this.data[i].xp)} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={styles.text}>{value}</Text>} />;
+            copyValues[i][2] = this.data[i].level;
+            copyValues[i][1] = <NumberFormat value={parseInt(this.data[i].rank)} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={styles.text}>{value}</Text>} />;
+
+            copyValues[i][0] = copyValues[i][0];
+          }
         }
 
         this.setState({
@@ -288,23 +296,40 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     height: 40,
     borderColor: 'gray',
-    borderWidth: 1
+    borderWidth: 1,
+    backgroundColor: 'white'
   },
   container: {
     justifyContent: 'center',
     flex: 1,
-    padding: 16,
     paddingTop: 30,
-    backgroundColor: '#fff'
+    backgroundColor: 'black'
   },
   head: {
     height: 40,
-    backgroundColor: '#f1f8ff'
+    backgroundColor: 'black'
   },
   text: {
-    margin: 6
+    textAlign: 'center',
+    fontFamily: 'visitor',
+    color: 'yellow',
   },
   contentContainer: {
-    paddingVertical: 20
-  }
+    backgroundColor: 'black'
+  },
+  imageStyle: {
+    width: 25,
+    height: 25,
+  },
+  imageView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonStyle: {
+    borderWidth: 1,
+    borderColor: 'yellow',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

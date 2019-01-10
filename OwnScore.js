@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native';
-import { AppRegistry, TextInput } from 'react-native';
-import { ScrollView, AsyncStorage } from 'react-native';
-import { FlatList, TouchableWithoutFeedback } from 'react-native';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { StyleSheet, Text, View, AppRegistry } from 'react-native';
+import { ScrollView, AsyncStorage, Image } from 'react-native';
+import { Table, Row, Rows, Col, Cols } from 'react-native-table-component';
+import { Font } from 'expo';
+import NumberFormat from 'react-number-format';
 
 export default class OwnScore extends React.Component {
 
@@ -14,13 +13,12 @@ export default class OwnScore extends React.Component {
             this.getOSRSHiscoreByName();
         })
 
-    }
+        Font.loadAsync({
+            'visitor': require('./assets/fonts/visitor.ttf'),
+        });
+        this.setState({ fontLoaded: true });
 
-    skills = ['Overall', 'Attack', 'Defence', 'Strength',
-        'Hitpoints', 'Ranged', 'Prayer', 'Magic', 'Cooking',
-        'Woodcutting', 'Fletching', 'Fishing', 'Firemaking',
-        'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility',
-        'Thieving', 'Slayer', 'Farming', 'Runecraft', 'Hunter', 'Construction'];
+    }
     data = [
         {
             "rank": "",
@@ -154,61 +152,59 @@ export default class OwnScore extends React.Component {
         this.state = {
             tableHead: ['Skill', 'Rank', 'Level', 'XP'],
             tableData: [
-                ['Overall', '', '', ''],
-                ['Attack', '', '', ''],
-                ['Defence', '', '', ''],
-                ['Strength', '', '', ''],
-                ['Hitpoints', '', '', ''],
-                ['Ranged', '', '', ''],
-                ['Prayer', '', '', ''],
-                ['Magic', '', '', ''],
-                ['Cooking', '', '', ''],
-                ['Woodcutting', '', '', ''],
-                ['Fletching', '', '', ''],
-                ['Fishing', '', '', ''],
-                ['Firemaking', '', '', ''],
-                ['Crafting', '', '', ''],
-                ['Smithing', '', '', ''],
-                ['Mining', '', '', ''],
-                ['Herblore', '', '', ''],
-                ['Agility', '', '', ''],
-                ['Thieving', '', '', ''],
-                ['Slayer', '', '', ''],
-                ['Farming', '', '', ''],
-                ['Runecraft', '', '', ''],
-                ['Hunter', '', '', ''],
-                ['Construction', '', '', '']
+                [<View style={styles.imageView}><Image source={require('./assets/skills/total.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/att.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/defence.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/str.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/hp.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/ranged.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/prayer.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/magic.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/cooking.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/wc.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/flet.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/fishing.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/fm.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/crafting.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/smithing.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/mining.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/herblore.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/agi.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/thieving.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/slayer.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/farming.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/rc.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/hunter.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/construction.png')} style={styles.imageStyle} /></View>, '', '', '']
             ],
-
-            characterName: ''
+            characterName: '',
+            fontLoaded: false
         }
     }
-
 
 
     render() {
         const state = this.state;
         return (
-            <ScrollView contentContainerStyle={styles.contentContainer}>
-                <Text style={styles.text}>
-                    Scores for user {this.state.characterName}
-                </Text>
-                <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-                    <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-                    <Rows data={state.tableData} textStyle={styles.text} />
-                </Table>
-            </ScrollView>
+            this.state.fontLoaded ? (
+                <ScrollView style={styles.contentContainer}>
+                    <Text style={styles.text}>
+                        Scores for user {this.state.characterName}
+                    </Text>
+                    <Table borderStyle={{ borderWidth: 2, borderColor: 'yellow' }}>
+                        <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
+                        <Rows data={state.tableData} textStyle={styles.text} />
+                    </Table>
+                </ScrollView>
+            ) : null
         );
 
 
     }
 
     getOSRSHiscoreByName() {
-
-        console.log(this.state.characterName);
         return fetch('https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=' + this.state.characterName)
             .then(response => {
-
                 var keys = Object.keys(this.data);
                 var stringScores = response._bodyInit;
                 var currentInput = ' ';
@@ -216,7 +212,7 @@ export default class OwnScore extends React.Component {
                 var stringPiece = ' ';
 
                 for (var i = 0; i < keys.length; i++) {
-                    for (var k = 0; k < 3; k++) {
+                    for (var k = 1; k < 4; k++) {
                         while (currentInput != ',' && currentInput != '' && currentInput != '\n' && currentIndex < stringScores.length) {
                             stringPiece += stringScores[currentIndex];
                             currentInput = stringScores[currentIndex];
@@ -224,14 +220,14 @@ export default class OwnScore extends React.Component {
                         }
                         stringPiece = stringPiece.replace(',', '');
                         stringPiece = stringPiece.replace(' ', '');
-                        if (k == 0) {
+                        if (k == 1) {
                             this.data[keys[i]].rank = stringPiece;
                             let newArray = [...this.state.tableData];
-                            newArray[i][0] = stringPiece;
-                        } else if (k == 1) {
+                            newArray[i][1] = stringPiece;
+                        } else if (k == 2) {
                             this.data[keys[i]].level = stringPiece;
                         }
-                        else if (k == 2) {
+                        else if (k == 3) {
                             this.data[keys[i]].xp = stringPiece;
                         }
                         stringPiece = '';
@@ -243,10 +239,9 @@ export default class OwnScore extends React.Component {
                 let copyValues = this.state.tableData;
 
                 for (let i = 0; i < copyValues.length; i++) {
-                    copyValues[i][3] = this.data[i].xp;
+                    copyValues[i][3] = <NumberFormat value={parseInt(this.data[i].xp)} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={styles.text}>{value}</Text>} />;
                     copyValues[i][2] = this.data[i].level;
-                    copyValues[i][1] = this.data[i].rank;
-                    copyValues[i][0] = this.skills[i];
+                    copyValues[i][1] = <NumberFormat value={parseInt(this.data[i].rank)} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={styles.text}>{value}</Text>} />;
                 }
 
                 this.setState({
@@ -268,10 +263,7 @@ export default class OwnScore extends React.Component {
                         }
                     })
 
-
-
                 return response;
-
 
             })
             .catch((error) => {
@@ -281,27 +273,24 @@ export default class OwnScore extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    searchContainer: {
-        textAlignVertical: 'top',
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1
-    },
-    container: {
-        justifyContent: 'center',
-        flex: 1,
-        padding: 16,
-        paddingTop: 30,
-        backgroundColor: '#fff'
-    },
     head: {
         height: 40,
-        backgroundColor: '#f1f8ff'
+        backgroundColor: 'black'
     },
     text: {
         textAlign: 'center',
+        fontFamily: 'visitor',
+        color: 'yellow',
     },
     contentContainer: {
-        paddingVertical: 20
-    }
+        backgroundColor: 'black'
+    },
+    imageStyle: {
+        width: 25,
+        height: 25,
+    },
+    imageView: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });

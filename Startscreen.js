@@ -1,49 +1,56 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, AsyncStorage, TextInput } from 'react-native';
+import { AsyncStorage, TextInput, TouchableOpacity } from 'react-native';
+import { Font } from 'expo';
+
 
 class InitScreen extends React.Component {
+
+  componentDidMount() {
+    Font.loadAsync({
+      'visitor': require('./assets/fonts/visitor.ttf'),
+    });
+    this.setState({ fontLoaded: true });
+  }
 
   constructor(props) {
     super(props);
     this.state = {
-      text: 'Rynzy',
-      firstLaunch: null
+      text: 'Upi',
+      firstLaunch: null,
+      fontLoaded: false
     }
   }
 
   render() {
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.titleText}>
-          Character Name
+      this.state.fontLoaded ? (
+        <View style={styles.container}>
+          <Text style={styles.fontStyle}>
+            Character Name
         </Text>
-        <TextInput
-          style={styles.searchContainer}
-          onChangeText={(text) => this.setState({ text })}
-          placeholder='Rynzy'
-        />
 
-
-        <View style={styles.bottom}>
-          <Button
-            style={styles.button}
-            onPress={() => this.save('characterName', this.state.text)}
-            title="Accept"
-            color="#841584" />
+          <TextInput
+            style={styles.inputField}
+            onChangeText={(text) => this.setState({ text })}
+            placeholder='RSN'
+          />
+          <View style={styles.bottom}>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => this.save('characterName', this.state.text)}>
+              <Text style={styles.fontStyle}>Accept</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-      </View>
-
+      ) : null
     );
   }
 
   save(key, value) {
     AsyncStorage.setItem(key, JSON.stringify(value), () => {
-      console.log('Saved with key ' + key + ' value ' + value);
       this.setState({ firstLaunch: false });
-      console.log(this.state.firstLaunch);
     });
   }
 
@@ -56,7 +63,10 @@ export default class Startscreen extends React.Component {
 
   constructor() {
     super();
-    this.state = { firstLaunch: null };
+    this.state = {
+      firstLaunch: null,
+      fontLoaded: false
+    };
   }
 
   componentDidMount() {
@@ -70,55 +80,65 @@ export default class Startscreen extends React.Component {
       }
     }), 1000);
 
+    Font.loadAsync({
+      'visitor': require('./assets/fonts/visitor.ttf'),
+    });
+    this.setState({ fontLoaded: true });
 
   }
-
-
-
 
   render() {
     const { navigate } = this.props.navigation;
 
     if (this.state.firstLaunch === null) {
-      return null; // This is the 'tricky' part: The query to AsyncStorage is not finished, but we have to present something to the user. Null will just render nothing, so you can also put a placeholder of some sort, but effectively the interval between the first mount and AsyncStorage retrieving your data won't be noticeable to the user.
+      return null;
     } else if (this.state.firstLaunch == true && this.props.firstLaunch == null) {
       return <InitScreen />;
     } else {
       return (
-        <View style={styles.container}>
-          <Button
-            onPress={() => navigate('HiscoreUser')}
-            title="Search Hiscores with username"
-            color="#841584"
-          />
-          <Button
-            onPress={() => navigate('OwnScore')}
-            title="Check own hiscores"
-            color="#841584"
-          />
-          <Button
-            onPress={() => navigate('SavedScores')}
-            title="Saved scores"
-            color="#841584"
-          />
-          <Button
-            onPress={() => this.removeEverything()}
-            title="Remove everything"
-            color="#841584"
-          />
-        </View>
+        this.state.fontLoaded ? (
+          <View style={styles.container}>
+
+            <Text style={styles.titleFont}>OSRS Tracker</Text>
+
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => navigate('HiscoreUser')}>
+              <Text style={styles.fontStyle}>Search hiscores</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => navigate('OwnScore')}>
+              <Text style={styles.fontStyle}>Check own hiscores</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => navigate('SavedScores')}>
+              <Text style={styles.fontStyle}>Saved scores</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => navigate('CompareScores')}>
+              <Text style={styles.fontStyle}>Compare progress</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => this.removeEverything()}>
+              <Text style={styles.fontStyle}>Remove everything</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null
       );
     }
-
-
   }
 
   removeEverything() {
-    console.log('HHEH');
     AsyncStorage.clear();
     this.setState({ firstLaunch: true });
-
-
   }
 }
 
@@ -126,13 +146,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: 'black',
   },
-  buttonContainer: {
-    marginTop: 20
+  fontStyle: {
+    fontFamily: 'visitor',
+    fontSize: 38,
+    color: 'yellow',
+    textAlign: 'center'
   },
-  alternativeLayoutButtonContainer: {
-    margin: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  buttonStyle: {
+    borderWidth: 1,
+    borderColor: 'yellow',
+    marginTop: 10,
+  },
+  inputField: {
+    backgroundColor: 'white',
+  },
+  titleFont: {
+    fontFamily: 'visitor',
+    fontSize: 48,
+    color: 'yellow',
+    textAlign: 'center'
   }
 });

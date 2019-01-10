@@ -1,18 +1,21 @@
 {
   "expo": {
-    "name": "OSRSHiscoreMobile",
-    "description": "This project is really great.",
+    "name": "OSRS Tracker",
+    "description": "Personal xp gain tracker for OSRS videogame.",
     "slug": "OSRSHiscoreMobile",
     "privacy": "public",
     "sdkVersion": "31.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios", 
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/myIcon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/mySplash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,8 +26,8 @@
     "ios": {
       "supportsTablet": true
     },
-   "android": {
-    "package": "com.rynzy.osrshiscoremobile"
+    "android": {
+      "package": "com.rynzy.osrshiscoremobile"
+    }
   }
- }
 }

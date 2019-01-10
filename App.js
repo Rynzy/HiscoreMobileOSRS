@@ -4,9 +4,9 @@ import Singleuser from './Singleuser.js';
 import OwnScore from './OwnScore.js';
 import SavedScores from './SavedScores.js';
 import OldScore from './OldScore.js';
+import CompareScores from './CompareScores.js';
 import { createStackNavigator } from 'react-navigation';
 import { createAppContainer } from 'react-navigation';
-
 
 const App = createStackNavigator({
   First: { screen: Startscreen },
@@ -14,6 +14,7 @@ const App = createStackNavigator({
   OwnScore: { screen: OwnScore },
   SavedScores: { screen: SavedScores },
   OldScore: { screen: OldScore },
+  CompareScores: { screen: CompareScores },
 });
 
 const AppContainer = createAppContainer(App);

@@ -1,37 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native';
-import { AppRegistry, TextInput } from 'react-native';
-import { ScrollView, AsyncStorage } from 'react-native';
-import { FlatList, TouchableWithoutFeedback } from 'react-native';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { StyleSheet, Text, View, Image} from 'react-native';
+import { AppRegistry, ScrollView, AsyncStorage} from 'react-native';
+import { Table, Row, Rows, Col, Cols} from 'react-native-table-component';
+import { Font } from 'expo';
+import NumberFormat from 'react-number-format';
 
 export default class OldScore extends React.Component {
 
-
-
     componentDidMount() {
-        console.log('Filu');
-        console.log(this.state.file)
         AsyncStorage.getItem(this.state.file).then(value => {
             value = JSON.parse(value)
             this.setState({
                 parsed: value
             })
         })
-    }
 
-    skills = ['Overall', 'Attack', 'Defence', 'Strength',
-        'Hitpoints', 'Ranged', 'Prayer', 'Magic', 'Cooking',
-        'Woodcutting', 'Fletching', 'Fishing', 'Firemaking',
-        'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility',
-        'Thieving', 'Slayer', 'Farming', 'Runecraft', 'Hunter', 'Construction'];
+        Font.loadAsync({
+            'visitor': require('./assets/fonts/visitor.ttf'),
+          });
+          this.setState({ fontLoaded: true });
+    }
 
     static navigationOptions = {
         title: 'Old Score',
     }
-
-
 
     constructor(props) {
         super(props);
@@ -39,35 +31,36 @@ export default class OldScore extends React.Component {
         this.state = {
             tableHead: ['Skill', 'Rank', 'Level', 'XP'],
             tableData: [
-                ['Overall', '', '', ''],
-                ['Attack', '', '', ''],
-                ['Defence', '', '', ''],
-                ['Strength', '', '', ''],
-                ['Hitpoints', '', '', ''],
-                ['Ranged', '', '', ''],
-                ['Prayer', '', '', ''],
-                ['Magic', '', '', ''],
-                ['Cooking', '', '', ''],
-                ['Woodcutting', '', '', ''],
-                ['Fletching', '', '', ''],
-                ['Fishing', '', '', ''],
-                ['Firemaking', '', '', ''],
-                ['Crafting', '', '', ''],
-                ['Smithing', '', '', ''],
-                ['Mining', '', '', ''],
-                ['Herblore', '', '', ''],
-                ['Agility', '', '', ''],
-                ['Thieving', '', '', ''],
-                ['Slayer', '', '', ''],
-                ['Farming', '', '', ''],
-                ['Runecraft', '', '', ''],
-                ['Hunter', '', '', ''],
-                ['Construction', '', '', '']
+                [<View style={styles.imageView}><Image source={require('./assets/skills/total.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/att.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/defence.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/str.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/hp.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/ranged.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/prayer.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/magic.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/cooking.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/wc.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/flet.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/fishing.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/fm.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/crafting.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/smithing.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/mining.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/herblore.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/agi.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/thieving.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/slayer.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/farming.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/rc.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/hunter.png')} style={styles.imageStyle} /></View>, '', '', ''],
+                [<View style={styles.imageView}><Image source={require('./assets/skills/construction.png')} style={styles.imageStyle} /></View>, '', '', '']
             ],
 
             file: navigation.getParam('file', 'empty'),
             parsed: {},
-            processing: false
+            processing: false,
+            fontLoaded: false
         }
 
         this.fetchOldData = this.fetchOldData.bind(this);
@@ -78,11 +71,9 @@ export default class OldScore extends React.Component {
 
         let copyValues = this.state.tableData;
         for (let i = 0; i < copyValues.length; i++) {
-            console.log(i + '. ' + value[i].xp);
-            copyValues[i][3] = value[i].xp;
+            copyValues[i][3] = <NumberFormat value={parseInt(value[i].xp)} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={styles.text}>{value}</Text>} />
             copyValues[i][2] = value[i].level;
-            copyValues[i][1] = value[i].rank;
-            copyValues[i][0] = this.skills[i];
+            copyValues[i][1] = <NumberFormat value={parseInt(value[i].rank)} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={styles.text}>{value}</Text>} />
         }
 
     }
@@ -90,48 +81,53 @@ export default class OldScore extends React.Component {
     render() {
         const { navigate } = this.props.navigation;
         const state = this.state;
-
         let value = this.state.parsed;
+        
         if (value.length == 24) {
             this.fetchOldData(value);
         }
         return (
-            <ScrollView contentContainerStyle={styles.contentContainer}>
-                <Text style={styles.text}>
+            this.state.fontLoaded ? (
+            <ScrollView style={styles.contentContainer}>
+                <Text style={styles.textTitle}>
                     Scores in {this.state.file}
                 </Text>
-                <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+                <Table borderStyle={{ borderWidth: 2, borderColor: 'yellow' }}>
                     <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
                     <Rows data={state.tableData} textStyle={styles.text} />
                 </Table>
             </ScrollView>
+            ) : null
         );
 
     }
 }
 
 const styles = StyleSheet.create({
-    searchContainer: {
-        textAlignVertical: 'top',
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1
-    },
-    container: {
-        justifyContent: 'center',
-        flex: 1,
-        padding: 16,
-        paddingTop: 30,
-        backgroundColor: '#fff'
-    },
     head: {
         height: 40,
-        backgroundColor: '#f1f8ff'
+        backgroundColor: 'black'
     },
     text: {
         textAlign: 'center',
+        fontFamily: 'visitor',
+        color: 'yellow',
+    },
+    textTitle: {
+        textAlign: 'center',
+        fontFamily: 'visitor',
+        color: 'yellow',
+        fontSize:24,
     },
     contentContainer: {
-        paddingVertical: 20
-    }
+        backgroundColor: 'black'
+    },
+    imageStyle: {
+        width: 25,
+        height: 25,
+      },
+      imageView: {
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
 });

@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, List } from 'react-native';
-import { AppRegistry, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { AppRegistry, TextInput, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { AsyncStorage, Button } from 'react-native';
-
-
+import { Image } from 'react-native';
+import { Font } from 'expo';
 export default class SavedScores extends React.Component {
 
     componentDidMount() {
@@ -11,13 +11,20 @@ export default class SavedScores extends React.Component {
             key.pop();
             this.setState({ files: key });
         });
+
+        Font.loadAsync({
+            'visitor': require('./assets/fonts/visitor.ttf'),
+        });
+        this.setState({ fontLoaded: true });
+
     }
 
     constructor(props) {
         super(props);
         this.state = {
             files: [],
-            edited: []
+            edited: [],
+            fontLoaded: false
         }
         this.viewRow = this.viewRow.bind(this);
     }
@@ -29,15 +36,24 @@ export default class SavedScores extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.contentContainer}>
                 <FlatList
                     data={this.state.files}
                     extraData={this.state.edited}
                     renderItem={({ item }) => (
                         <View style={styles.mediaWrapper}>
-                            <Text>{item}</Text>
-                            <TouchableWithoutFeedback style={styles.viewButton} onPress={() => this.viewRow(item)}><View style={styles.viewButtonInner}><Text>View</Text></View></TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback style={styles.removeButton} onPress={() => this.deleteRow(item)}><View style={styles.removeButtonInner}><Text>Delete</Text></View></TouchableWithoutFeedback>
+                            <Text style={styles.text}>{item}</Text>
+                            <TouchableOpacity
+                                style={styles.buttonStyle}
+                                onPress={() => this.viewRow(item)}>
+                                <View style={styles.viewButtonInner}><Text style={styles.text}>View</Text></View>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.buttonStyle}
+                                onPress={() => this.deleteRow(item)}>
+                                <View style={styles.removeButtonInner}><Text style={styles.text}>Delete</Text></View>
+                            </TouchableOpacity>
                         </View>
                     )}
                     keyExtractor={item => item}
@@ -93,6 +109,9 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: 'center',
+        fontFamily: 'visitor',
+        color: 'yellow',
+        fontSize: 24,
     },
     contentContainer: {
         paddingVertical: 20
@@ -101,20 +120,27 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-around",
-
         marginVertical: 3,
+        borderWidth: 1,
+        borderColor: 'yellow'
     },
     removeButton: {
         position: 'absolute',
         right: 0,
     },
     removeButtonInner: {
-        backgroundColor: 'red',
     },
     viewButton: {
 
     },
     viewButtonInner: {
-        backgroundColor: 'green',
-    }
+    },
+    contentContainer: {
+        backgroundColor: 'black',
+        flex: 1
+    },
+    buttonStyle: {
+        borderWidth: 1,
+        borderColor: 'yellow',
+      },
 });
